@@ -1,5 +1,4 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -36,6 +35,15 @@ const Index = () => {
       description: "Appetizing food delivery platform"
     }
   ];
+
+  // Auto-slide functionality
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % portfolioItems.length);
+    }, 4000); // Change slide every 4 seconds
+
+    return () => clearInterval(interval);
+  }, [portfolioItems.length]);
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % portfolioItems.length);
@@ -75,33 +83,31 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Navigation */}
-      <nav className="fixed top-0 w-full bg-white/90 backdrop-blur-md z-50 border-b border-gray-100">
+      {/* Navigation - Updated to match screenshot */}
+      <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-md z-50 border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex justify-between items-center">
-            <div className="font-bold text-xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              makerkit
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-black rounded-md flex items-center justify-center">
+                <span className="text-white font-bold text-sm">Ax</span>
+              </div>
+              <span className="font-semibold text-lg text-gray-900">Aurex Labs</span>
             </div>
-            <div className="hidden md:flex space-x-8">
-              <a href="#portfolio" className="text-gray-600 hover:text-gray-900 transition-colors">Portfolio</a>
-              <a href="#features" className="text-gray-600 hover:text-gray-900 transition-colors">Features</a>
-              <a href="#services" className="text-gray-600 hover:text-gray-900 transition-colors">Services</a>
-              <a href="#contact" className="text-gray-600 hover:text-gray-900 transition-colors">Contact</a>
+            <div className="hidden md:flex items-center space-x-8">
+              <a href="#home" className="text-gray-900 font-medium hover:text-gray-600 transition-colors">Home</a>
+              <a href="#portfolio" className="text-gray-500 hover:text-gray-900 transition-colors">Works</a>
             </div>
-            <div className="flex items-center space-x-4">
-              <button className="text-gray-600 hover:text-gray-900">Sign In</button>
-              <BookingDialog>
-                <Button className="bg-black text-white hover:bg-gray-800 px-6 py-2 rounded-lg">
-                  Sign Up
-                </Button>
-              </BookingDialog>
-            </div>
+            <BookingDialog>
+              <Button className="bg-gray-900 text-white hover:bg-gray-800 px-6 py-2 rounded-full font-medium">
+                Work
+              </Button>
+            </BookingDialog>
           </div>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20 px-6">
+      <section id="home" className="pt-32 pb-20 px-6">
         <div className="max-w-7xl mx-auto text-center">
           <Badge className="mb-6 bg-black text-white px-4 py-2">
             New
@@ -124,7 +130,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Portfolio Slider Section */}
+      {/* Portfolio Slider Section - Updated with auto-slide */}
       <section id="portfolio" className="py-20 px-6 bg-gray-50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
@@ -135,12 +141,12 @@ const Index = () => {
           <div className="relative">
             <div className="overflow-hidden rounded-2xl">
               <div 
-                className="flex transition-transform duration-500 ease-in-out"
+                className="flex transition-transform duration-700 ease-in-out"
                 style={{ transform: `translateX(-${currentSlide * 100}%)` }}
               >
                 {portfolioItems.map((item, index) => (
                   <div key={index} className="w-full flex-shrink-0 px-4">
-                    <Card className="overflow-hidden">
+                    <Card className="overflow-hidden shadow-lg">
                       <div className="aspect-video">
                         <img 
                           src={item.image} 
@@ -160,16 +166,29 @@ const Index = () => {
             
             <button 
               onClick={prevSlide}
-              className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 rounded-full p-3 shadow-lg hover:bg-white transition-colors"
+              className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 rounded-full p-3 shadow-lg hover:bg-white transition-colors z-10"
             >
               <ChevronLeft className="w-6 h-6" />
             </button>
             <button 
               onClick={nextSlide}
-              className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 rounded-full p-3 shadow-lg hover:bg-white transition-colors"
+              className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 rounded-full p-3 shadow-lg hover:bg-white transition-colors z-10"
             >
               <ChevronRight className="w-6 h-6" />
             </button>
+
+            {/* Slide indicators */}
+            <div className="flex justify-center mt-6 space-x-2">
+              {portfolioItems.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentSlide(index)}
+                  className={`w-3 h-3 rounded-full transition-colors ${
+                    index === currentSlide ? 'bg-gray-900' : 'bg-gray-300'
+                  }`}
+                />
+              ))}
+            </div>
           </div>
 
           <div className="text-center mt-8">
@@ -383,7 +402,7 @@ const Index = () => {
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
-              <h3 className="text-purple-400 text-xl font-bold mb-4">Apex Web Solutions</h3>
+              <h3 className="text-purple-400 text-xl font-bold mb-4">Aurex Labs</h3>
               <p className="text-gray-400">
                 Building successful products through innovation and expertise.
               </p>
@@ -421,7 +440,7 @@ const Index = () => {
           </div>
           
           <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
-            <p>© 2025 Apex Web Solutions. All rights reserved.</p>
+            <p>© 2025 Aurex Labs. All rights reserved.</p>
           </div>
         </div>
       </footer>
